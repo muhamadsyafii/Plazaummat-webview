@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
             view.getSettings().setLoadsImagesAutomatically(true);
             view.getSettings().setJavaScriptEnabled(true);
             view.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+            view.getSettings().setLoadWithOverviewMode(true);
+            view.getSettings().setUseWideViewPort(true);
             view.loadUrl("https://plazaummat.com/");
         } else {
             Log.e(TAG, "onCreate: connection failure");
