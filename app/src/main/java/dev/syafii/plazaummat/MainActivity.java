@@ -1,6 +1,7 @@
 package dev.syafii.plazaummat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout parentLayout;
     private WebView view;
     ProgressBar progressBar;
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         view = findViewById(R.id.webView);
         parentLayout = findViewById(R.id.rlayout);
         progressBar = findViewById(R.id.progressBar);
+        refreshLayout = findViewById(R.id.swipeRefreshLayout);
 
         baseNetwork = BaseNetwork.shared(this, parentLayout);
         baseNetwork.registerNetworkBroadcastForNougat();
@@ -48,6 +51,19 @@ public class MainActivity extends AppCompatActivity {
             showLoading();
             Log.e(TAG, "onCreate: connection failure");
         }
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (baseNetwork.isConnected()){
+                    showLoading();
+                    view.reload();
+                }else {
+                    hideLoading();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -104,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void hideLoading(){
+        if (refreshLayout !=null) refreshLayout.setRefreshing(false);
         progressBar.setVisibility(View.GONE);
     }
+
+
+
 }
